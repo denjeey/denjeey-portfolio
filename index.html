@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denjeey - Content Creator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0A0A0F;
+      --surface:  #111118;
+      --border:   #1E1E2A;
+      --accent:   #B8FF57;
+      --accent2:  #7B5CFA;
+      --text:     #F0F0F8;
+      --muted:    #6B6B80;
+      --dim:      #2A2A38;
+      --radius:   12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 100px 0 80px;
+      position: relative;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -60px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(123, 92, 250, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 88px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 .accent { color: var(--accent); }
+    .hero h1 .dim-text { color: var(--muted); }
+
+    .hero-bio {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .hero-bio strong { color: var(--text); }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Nunito', sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0A0A0F;
+    }
+
+    .btn-primary:hover { background: #caff7a; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    /* ── STATS TICKER ── */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 0;
+      margin: 0 0 80px;
+    }
+
+    .stats-bar .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0;
+    }
+
+    .stat-item {
+      padding: 0 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-item:first-child { padding-left: 0; }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Nunito', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-number .accent { color: var(--accent); }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 0; }
+
+    .section-eyebrow {
+      font-family: 'Nunito', sans-serif;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+      line-height: 1.15;
+    }
+
+    /* ── CONTENT GRID ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .content-card.landscape {
+      grid-column: span 2;
+    }
+
+    .content-thumb.landscape {
+      aspect-ratio: 16/9;
+    }
+
+    .content-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .content-card:hover {
+      border-color: var(--dim);
+      transform: translateY(-3px);
+    }
+
+    .content-thumb {
+      width: 100%;
+      aspect-ratio: 9/16;
+      background: var(--dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Replace this background with your actual thumbnail: background: url('your-thumb.jpg') center/cover */
+    .content-thumb.tiktok  { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+    .content-thumb.youtube { background: linear-gradient(145deg, #1a0a0a 0%, #2d0c0c 50%, #3d1515 100%); }
+    .content-thumb.ig      { background: linear-gradient(145deg, #1a0a1a 0%, #2d0a2d 50%, #3d1540 100%); }
+
+    .thumb-platform {
+      font-family: 'Nunito', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 4px;
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+
+    .thumb-platform.tiktok  { background: rgba(255,255,255,0.1); color: #fff; }
+    .thumb-platform.youtube { background: rgba(255,0,0,0.2); color: #ff6b6b; }
+    .thumb-platform.ig      { background: rgba(200,100,200,0.2); color: #e879f9; }
+
+    .thumb-views {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .play-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-icon svg { width: 18px; height: 18px; fill: white; margin-left: 3px; }
+
+    .card-body { padding: 16px; }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-text {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+
+    .about-text strong { color: var(--text); }
+
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .platforms-stack { display: flex; flex-direction: column; gap: 16px; }
+
+    .platform-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .platform-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .platform-icon.tiktok  { background: rgba(255,255,255,0.08); }
+    .platform-icon.youtube { background: rgba(255,0,0,0.12); }
+    .platform-icon.ig      { background: rgba(200,100,200,0.12); }
+
+    .platform-info { flex: 1; }
+    .platform-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .platform-handle { font-size: 12px; color: var(--muted); }
+    .platform-count {
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ── COLLABS ── */
+    .collabs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .collab-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      background: var(--surface);
+      transition: border-color 0.2s;
+    }
+
+    .collab-card:hover { border-color: var(--dim); }
+
+    .collab-name {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .collab-type {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── WHAT I OFFER ── */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .offer-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      background: var(--surface);
+    }
+
+    .offer-icon {
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    .offer-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .offer-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      border-top: 1px solid var(--border);
+      padding: 80px 0;
+    }
+
+    .contact-box {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px;
+      background: var(--surface);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-box::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(184,255,87,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-box h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .contact-box p {
+      color: var(--muted);
+      max-width: 400px;
+      margin: 0 auto 36px;
+      font-size: 16px;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+    }
+
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDERS ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .stat-item { padding: 0 16px; }
+      .stats-bar .container { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .stat-item:nth-child(2) { border-right: none; }
+      .contact-box { padding: 36px 24px; }
+      nav .nav-links { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-logo">@denjeey</a>
+      <ul class="nav-links">
+        <li><a href="#content">Content</a></li>
+        <li><a href="#about">About</a></li>
+
+        <li><a href="#work-with-me">Work with me</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-glow"></div>
+      <p class="hero-tag">Content Creator · Glasgow</p>
+      <h1>Denjeey</h1>
+      <p class="hero-bio">
+        <strong>16 million views</strong> across TikTok, YouTube and Instagram through a mix of authenticity and skill - connecting with a broad audience of 18-35 year olds. Every video is created with a strong understanding of hooks, storytelling and editing, because intentional content is what gets results.
+      </p>
+      <div class="hero-cta">
+        <a href="mailto:denjeey.info@gmail.com" class="btn btn-primary">Let's work together →</a>
+        <a href="#content" class="btn btn-ghost">See my content</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stat-item">
+        <p class="stat-number">20<span class="accent">M+</span></p>
+        <p class="stat-label">Total Views</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-number">73<span class="accent">K</span></p>
+        <p class="stat-label">Followers</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-number">4</p>
+        <p class="stat-label">Platforms</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-number">18<span class="accent">–35</span></p>
+        <p class="stat-label">Core Audience</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED CONTENT -->
+  <section id="content">
+    <div class="container">
+      <p class="section-eyebrow">Featured content</p>
+      <h2 class="section-title">Top performing videos</h2>
+
+      <div class="content-grid">
+
+        <!-- CARD 1 - TikTok -->
+        <a href="https://www.tiktok.com/@denjeey/video/7541793052453621014" target="_blank" rel="noopener" class="content-card">
+          <div class="content-thumb tiktok" style="background: url('thumb-tiktok.png') center/cover no-repeat;">
+            <span class="thumb-platform tiktok">TikTok</span>
+            <div class="play-icon">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="thumb-views">1.3M views</span>
+          </div>
+          <div class="card-body">
+            <p class="card-title">Most viewed TikTok</p>
+            <p class="card-meta">@denjeey · TikTok</p>
+          </div>
+        </a>
+
+        <!-- CARD 2 - Instagram -->
+        <a href="https://www.instagram.com/reel/DXXZz7pgtIQ/" target="_blank" rel="noopener" class="content-card">
+          <div class="content-thumb ig" style="background: url('thumb-instagram.png') center/cover no-repeat;">
+            <span class="thumb-platform ig">Instagram</span>
+            <div class="play-icon">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="thumb-views">4.1M views</span>
+          </div>
+          <div class="card-body">
+            <p class="card-title">Most viewed Reel</p>
+            <p class="card-meta">@denj33y · Instagram</p>
+          </div>
+        </a>
+
+        <!-- CARD 3 - YouTube -->
+        <a href="https://youtu.be/3C6bT96rO0M" target="_blank" rel="noopener" class="content-card landscape">
+          <div class="content-thumb youtube landscape" style="background: url('thumb-youtube.png') center/cover no-repeat;">
+            <span class="thumb-platform youtube">YouTube</span>
+            <div class="play-icon">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="thumb-views">234K views</span>
+          </div>
+          <div class="card-body">
+            <p class="card-title">Most viewed video</p>
+            <p class="card-meta">@denjeey · Long-form · YouTube</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <p class="section-eyebrow">About</p>
+      <h2 class="section-title">Denjeey</h2>
+
+
+      <div class="about-grid">
+        <div>
+          <p class="about-text">
+            I'm a Glasgow-based content creator with over 73,000 followers and 16 million views across TikTok, YouTube, Instagram and Twitch. I have a genuine passion for content creation - from crafting hooks that stop the scroll, to storytelling that keeps people watching, to editing that feels distinct and personal.
+          </p>
+          <p class="about-text">
+            What sets me apart is authenticity. My content isn't performed or polished for the sake of it - I identify trends early and adapt them through my own creative lens, staying current without losing what makes my content real. That combination is what connects with a broad audience of 18-35 year olds and keeps them coming back.
+          </p>
+          <div class="tags-list">
+            <span class="tag">Gaming</span>
+            <span class="tag">Anime</span>
+            <span class="tag">Lifestyle</span>
+            <span class="tag">Gym</span>
+            <span class="tag">Fitness</span>
+          </div>
+        </div>
+
+        <div class="platforms-stack">
+          <div class="platform-row">
+            <div class="platform-icon ig">📸</div>
+            <div class="platform-info">
+              <p class="platform-name">Instagram</p>
+              <p class="platform-handle">@denj33y</p>
+            </div>
+            <p class="platform-count">39.1K</p>
+          </div>
+          <div class="platform-row">
+            <div class="platform-icon tiktok">📱</div>
+            <div class="platform-info">
+              <p class="platform-name">TikTok</p>
+              <p class="platform-handle">@denjeey</p>
+            </div>
+            <p class="platform-count">30K</p>
+          </div>
+          <div class="platform-row">
+            <div class="platform-icon youtube">▶️</div>
+            <div class="platform-info">
+              <p class="platform-name">YouTube</p>
+              <p class="platform-handle">@denjeey</p>
+            </div>
+            <p class="platform-count">4.4K</p>
+          </div>
+          <div class="platform-row">
+            <div class="platform-icon" style="background: rgba(100,65,165,0.15);">🟣</div>
+            <div class="platform-info">
+              <p class="platform-name">Twitch</p>
+              <p class="platform-handle">@denjeey</p>
+            </div>
+            <p class="platform-count">255</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- WHAT I OFFER -->
+  <section id="work-with-me">
+    <div class="container">
+      <p class="section-eyebrow">Work with me</p>
+      <h2 class="section-title">What I offer</h2>
+
+      <div class="offer-grid">
+        <div class="offer-card">
+          <p class="offer-icon">🎬</p>
+          <p class="offer-title">Dedicated video</p>
+          <p class="offer-desc">A full video built around your brand, product, or message. Native to platform, not an ad.</p>
+        </div>
+        <div class="offer-card">
+          <p class="offer-icon">⚡</p>
+          <p class="offer-title">Integrations</p>
+          <p class="offer-desc">Seamless brand mentions woven into existing content. Feels natural because it is.</p>
+        </div>
+        <div class="offer-card">
+          <p class="offer-icon">📦</p>
+          <p class="offer-title">UGC content</p>
+          <p class="offer-desc">Creative assets you own and use across your own channels and paid media.</p>
+        </div>
+        <div class="offer-card">
+          <p class="offer-icon">🔗</p>
+          <p class="offer-title">Ambassador</p>
+          <p class="offer-desc">Ongoing partnership - consistent presence that builds real brand association over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <div class="contact-section" id="contact">
+    <div class="container">
+      <div class="contact-box">
+        <p class="section-eyebrow" style="margin-bottom: 20px; color: #ffffff; font-weight: 900; font-size: 28px; letter-spacing: -0.01em; white-space: nowrap; text-transform: none; text-align: center;">Open to opportunities</p>
+        <p>Brand deals, creative roles, ambassador partnerships - if it involves content, I'm interested. Get in touch.</p>
+        <div class="contact-links">
+          <a href="mailto:denjeey.info@gmail.com" class="btn btn-primary">
+            denjeey.info@gmail.com →
+          </a>
+        </div>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 20px; text-align: center;">© 2026 Denjeey. All rights reserved.</p>
+
+
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+    </div>
+  </footer>
+
+</body>
+</html>
