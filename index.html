@@ -250,6 +250,23 @@
       line-height: 1.15;
     }
 
+
+    /* ── SHOWREEL ── */
+    .showreel-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #000;
+    }
+
+    .showreel-wrap video {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
     /* ── CONTENT GRID ── */
     .content-grid {
       display: grid;
@@ -590,6 +607,7 @@
         <li><a href="#about">About</a></li>
 
         <li><a href="#work-with-me">Work with me</a></li>
+        <li><a href="#showreel">Showreel</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
@@ -783,6 +801,22 @@
           <p class="offer-title">Ambassador</p>
           <p class="offer-desc">Ongoing partnership - consistent presence that builds real brand association over time.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- SHOWREEL -->
+  <section id="showreel">
+    <div class="container">
+      <p class="section-eyebrow">Showreel</p>
+      <h2 class="section-title">Watch my work</h2>
+      <div class="showreel-wrap">
+        <video controls playsinline preload="metadata" poster="showreel-poster.jpg">
+          <source src="showreel.mp4" type="video/mp4" />
+          Your browser does not support video playback.
+        </video>
       </div>
     </div>
   </section>
